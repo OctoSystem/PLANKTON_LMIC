@@ -65,6 +65,7 @@ void os_getDevEui (u1_t* buf) { memcpy_P(buf, DEVEUI, 8);}
 static const u1_t PROGMEM APPKEY[16] = {  0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6, 0xAB, 0xF7, 0x15, 0x88, 0x09, 0xCF, 0x4F, 0x3C };
 void os_getDevKey (u1_t* buf) {  memcpy_P(buf, APPKEY, 16);}
 
+static uint8_t getdistance[]= "take a distance";
 static uint8_t mydata[] = "Hello, world!";
 static osjob_t sendjob;
 
@@ -74,10 +75,10 @@ const unsigned TX_INTERVAL = 60;
 
 // Pin mapping
 const lmic_pinmap lmic_pins = {
-    .nss = 6,
+    .nss = 10,
     .rxtx = LMIC_UNUSED_PIN,
-    .rst = 5,
-    .dio = {2, 3, 4},
+    .rst = 9,
+    .dio = {2, 5, LMIC_UNUSED_PIN},
 };
 
 void onEvent (ev_t ev) {
@@ -210,6 +211,6 @@ void loop() {
     Serial.print("Poubelle vide:");
     Serial.println(cm);
   }
-  
+
   delay(1500);
 }
