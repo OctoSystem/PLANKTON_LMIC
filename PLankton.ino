@@ -154,6 +154,14 @@ void onEvent (ev_t ev) {
     }
 }
 void do_send(osjob_t* j){
+
+    // Mesure voltage
+    float temp1;
+    float voltag = ((temp1*3300)/4095)+170;
+    float temp = (voltag*0.1);
+    Serial.print("Voltage: ");
+    Serial.println(voltag);
+
     // Check if there is not a current TX/RX job running
     if (LMIC.opmode & OP_TXRXPEND) {
         Serial.println(F("OP_TXRXPEND, not sending"));
