@@ -74,7 +74,7 @@ void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
 // TTN array
-byte mydata[2]; // size is 2
+byte mydata[4]; // size is 2
 static osjob_t sendjob;
 // Schedule TX every this many seconds (might become longer due to duty
 // cycle limitations).
@@ -155,12 +155,15 @@ void onEvent (ev_t ev) {
 }
 void do_send(osjob_t* j){
 
-    // Mesure voltage
-    float temp1;
-    float voltag = ((temp1*3300)/4095)+170;
-    float temp = (voltag*0.1);
-    Serial.print("Voltage: ");
-    Serial.println(voltag);
+        // Output the distance in mm
+    Serial.println(hcsr04.distanceInMillimeters());
+    // TTN data
+    uint16_t distance = hcsr04.distanceInMillimeters();
+    int measure = distance;
+    mydata[0] = distance >> 8;
+    mydata[1] = measure >> 0;
+    Serial.println(hcsr04.ToString());
+    delay(500);
 
     // Check if there is not a current TX/RX job running
     if (LMIC.opmode & OP_TXRXPEND) {
@@ -210,9 +213,9 @@ void setup() {
 //    LMIC_setupChannel(1, 868300000, DR_RANGE_MAP(DR_SF12, DR_SF7B), BAND_CENTI);      // g-band
 //    LMIC_setupChannel(2, 868500000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
 //    LMIC_setupChannel(3, 867100000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-      LMIC_setupChannel(4, 867300000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-      LMIC_setupChannel(5, 867500000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-      LMIC_setupChannel(6, 867700000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+//    LMIC_setupChannel(4, 867300000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+//    LMIC_setupChannel(5, 867500000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
+//    LMIC_setupChannel(6, 867700000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
       LMIC_setupChannel(7, 867900000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
 //    LMIC_setupChannel(8, 868800000, DR_RANGE_MAP(DR_FSK,  DR_FSK),  BAND_MILLI);      // g2-band
 //    // TTN defines an additional channel at 869.525Mhz using SF9 for class B
@@ -237,13 +240,4 @@ void setup() {
 }
 void loop() {
     os_runloop_once();
-    // Output the distance in mm
-    Serial.println(hcsr04.distanceInMillimeters());
-    // TTN data
-    int distance = hcsr04.distanceInMillimeters();
-    mydata[0] = highByte(distance);
-    mydata[1] = lowByte(distance);
-    // Output information about the device, driver, and distance
-    Serial.println(hcsr04.ToString());
-    delay(500);
 }
