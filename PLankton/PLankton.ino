@@ -174,7 +174,7 @@ void do_send(osjob_t* j){
     } else {
         // Prepare upstream data transmission at the next possible time.
         // TTN data
-        LMIC_setTxData2(1, mydata, sizeof(mydata)-1, 0);
+        LMIC_setTxData2(1, mydata, sizeof(mydata), 0);
         Serial.println(F("Packet queued"));
     }
     // Next TX is scheduled after TX_COMPLETE event.
@@ -245,4 +245,3 @@ void setup() {
 }
 void loop() {
     os_runloop_once();
-}
