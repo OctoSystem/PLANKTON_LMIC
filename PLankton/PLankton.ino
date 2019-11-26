@@ -50,6 +50,8 @@
 #include <hal/hal.h>
 #include <SPI.h>
 #include <hcsr04.h>
+
+
 #define BUILTIN_LED 25
 #define TRIG_PIN A4
 #define ECHO_PIN A5
@@ -78,7 +80,7 @@ byte mydata[4]; // size is 2
 static osjob_t sendjob;
 // Schedule TX every this many seconds (might become longer due to duty
 // cycle limitations).
-const unsigned TX_INTERVAL = 60;
+const unsigned TX_INTERVAL = 10;
 
 
 // Pin mapping
@@ -88,6 +90,8 @@ const lmic_pinmap lmic_pins = {
   .rst = 9,
   .dio = {2, 5, LMIC_UNUSED_PIN},
 };
+
+
 void onEvent (ev_t ev) {
     Serial.print(os_getTime());
     Serial.print(": ");
@@ -214,6 +218,8 @@ void setup() {
     // Setting up channels should happen after LMIC_setSession, as that
     // configures the minimal channel set.
     // NA-US channels 0-71 are configured automatically
+    LMIC_setClockError(MAX_CLOCK_ERROR * 1 / 100);
+
     LMIC_setupChannel(0, 868100000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
     LMIC_setupChannel(1, 868300000, DR_RANGE_MAP(DR_SF12, DR_SF7B), BAND_CENTI);      // g-band
     LMIC_setupChannel(2, 868500000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
@@ -241,7 +247,9 @@ void setup() {
     // Set data rate and transmit power for uplink (note: txpow seems to be ignored by the library)
     LMIC_setDrTxpow(DR_SF7,14);
     // Start job
+
     do_send(&sendjob);
 }
 void loop() {
     os_runloop_once();
+}
