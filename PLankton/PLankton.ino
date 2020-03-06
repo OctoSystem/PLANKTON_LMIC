@@ -62,11 +62,11 @@ HCSR04 hcsr04(TRIG_PIN, ECHO_PIN, 20, 4000);
 // LoRaWAN NwkSKey, network session key
 // This is the default Semtech key, which is used by the early prototype TTN
 // network.
-static const PROGMEM u1_t NWKSKEY[16] = { 0x50, 0x92, 0x78, 0xC1, 0xF0, 0x9B, 0x99, 0xA4, 0xF0, 0xF3, 0x96, 0x80, 0xB6, 0xB4, 0x83, 0xEC };
+static const PROGMEM u1_t NWKSKEY[16] = {  };
 // LoRaWAN AppSKey, application session key
 // This is the default Semtech key, which is used by the early prototype TTN
 // network.
-static const u1_t PROGMEM APPSKEY[16] = { 0x24, 0x6E, 0x71, 0x2D, 0xD9, 0x1B, 0x70, 0x46, 0xD7, 0x17, 0xA8, 0x94, 0x6A, 0x54, 0xE4, 0xB7 };
+static const u1_t PROGMEM APPSKEY[16] = {  };
 // LoRaWAN end-device address (DevAddr)
 static const u4_t DEVADDR = 0x260113C7; // <-- Change this address for every node!
 // These callbacks are only used in over-the-air activation, so they are
